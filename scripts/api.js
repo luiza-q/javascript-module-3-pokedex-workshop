@@ -7,10 +7,10 @@ async function getAllPokemon() {
 }
 
 async function getOnePokemonSprite(url) {
-  console.log("Here I will be returning a sprite from my Pokemon");
+  const response = await fetch (url);
+  const pokemon = await response.json();
 
-  // fetch the response from url
-  // return one of the sprites we get
+  return pokemon.sprites['front_default']
 }
 
 export { getAllPokemon, getOnePokemonSprite };
