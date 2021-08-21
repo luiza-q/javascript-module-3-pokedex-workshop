@@ -1,4 +1,4 @@
-import { getAllPokemon, getOnePokemonSprite } from "./api.js";
+import { getAllPokemon, getOnePokemonSprite, getOnePokemon } from "./api.js";
 
 async function createPokemonImage(url) {
   const pokemonImage = document.createElement("img");
@@ -23,9 +23,37 @@ async function createPokemon(name, url) {
 }
 
 
+
+function searchPokemon(event) {
+  if (event.code === "Enter") {
+    const term=event.target.value;
+    const url = `https://pokeapi.co/api/v2/pokemon/${term}`;
+    const root = document.getElementById("root");
+    root.innerHTML=''
+    createPokemon(term, url).then(
+      newPokemon => root.appendChild(newPokemon)
+    )
+    //getOnePokemon(term)
+    //  .then(pokemon => console.log(pokemon))
+  }
+}
+
+function createSearchField() {
+  const searchField = document.createElement("input")
+  searchField.type="text"
+  searchField.placeholder="Search"
+  searchField.addEventListener("keyup", searchPokemon)
+  return searchField;
+}
+
+
 async function init() {
   const root = document.getElementById("root");
+
+  document.body.insertBefore(createSearchField(), root)
+
   const pokemon = await getAllPokemon();
+
   pokemon.forEach(async ({ name, url }) => {
     root.appendChild(await createPokemon(name, url))
   });
